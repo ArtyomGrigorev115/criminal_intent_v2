@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.UUID
 
 private const val TAG = "CrimeListFragment"
+
 class CrimeListFragment : Fragment() {
 
 
@@ -64,9 +65,7 @@ class CrimeListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        crimeListViewModel.crimeListLiveData.observe(
-            viewLifecycleOwner,
-            Observer { crimes ->
+        crimeListViewModel.crimeListLiveData.observe(viewLifecycleOwner, Observer { crimes ->
                 crimes?.let {
                     Log.i(TAG, "Got crimes ${crimes.size}")
                     updateUI(crimes)
@@ -122,8 +121,7 @@ class CrimeListFragment : Fragment() {
         }
 
         override fun onClick(v: View) {
-            Toast.makeText(context, "${crime.title} pressed!", Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(context, "${crime.title} pressed!", Toast.LENGTH_SHORT).show()
             callbacks?.onCrimeSelected(crime.id)
         }
     }
