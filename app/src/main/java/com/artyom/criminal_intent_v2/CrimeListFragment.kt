@@ -1,5 +1,6 @@
 package com.artyom.criminal_intent_v2
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,9 +14,27 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.util.UUID
 
 private const val TAG = "CrimeListFragment"
 class CrimeListFragment : Fragment() {
+
+
+    /**
+     * Callbacks интерфейс обратного вызова
+     *
+     * @constructor Create empty Callbacks
+     */
+    interface Callbacks{
+        fun onCrimeSelected(crimeId: UUID)
+    }
+
+    private var callbacks: Callbacks? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callbacks = context as Callbacks?
+    }
 
     private lateinit var crimeRecyclerView: RecyclerView
    // private var adapter: CrimeAdapter? = null
@@ -53,6 +72,11 @@ class CrimeListFragment : Fragment() {
                     updateUI(crimes)
                 }
             })
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callbacks = null
     }
 
   /*  private fun updateUI() {
@@ -100,6 +124,7 @@ class CrimeListFragment : Fragment() {
         override fun onClick(v: View) {
             Toast.makeText(context, "${crime.title} pressed!", Toast.LENGTH_SHORT)
                 .show()
+            callbacks?.onCrimeSelected(crime.id)
         }
     }
 

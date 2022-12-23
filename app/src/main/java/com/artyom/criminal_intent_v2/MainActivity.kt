@@ -2,8 +2,13 @@ package com.artyom.criminal_intent_v2
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import java.util.*
 
-class MainActivity : AppCompatActivity() {
+private const val TAG = "MainActivity"
+
+class MainActivity : AppCompatActivity(), CrimeListFragment.Callbacks {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -12,10 +17,14 @@ class MainActivity : AppCompatActivity() {
 
         if (currentFragment == null) {
             val fragment = CrimeListFragment.newInstance()
-            supportFragmentManager
-                .beginTransaction()
-                .add(R.id.fragment_container, fragment)
-                .commit()
+
+            supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit()
         }
+    }
+
+    override fun onCrimeSelected(crimeId: UUID) {
+      //  Log.d(TAG, "MainActivity.onCrimeSelected: $crimeId")
+        val fragment = CrimeFragment()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
     }
 }
