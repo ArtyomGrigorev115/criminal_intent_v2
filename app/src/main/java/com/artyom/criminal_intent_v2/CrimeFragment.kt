@@ -2,6 +2,8 @@ package com.artyom.criminal_intent_v2
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -139,6 +141,17 @@ class CrimeFragment: Fragment(), DatePickerFragment.Callbacks {
                 Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
             setOnClickListener {
                 startActivityForResult(pickContactIntent, REQUEST_CONTACT)
+            }
+
+            //TODO: Защита от отсутствия приложения адресной книги
+            //pickContactIntent.addCategory(Intent.CATEGORY_HOME)
+
+            val packageManager: PackageManager = requireActivity().packageManager
+            val resolvedActivity: ResolveInfo? =
+                packageManager.resolveActivity(pickContactIntent,
+                    PackageManager.MATCH_DEFAULT_ONLY)
+            if (resolvedActivity == null) {
+                isEnabled = false
             }
         }
 
