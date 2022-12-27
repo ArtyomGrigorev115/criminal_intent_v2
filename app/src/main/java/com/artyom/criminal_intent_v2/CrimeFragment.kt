@@ -1,6 +1,8 @@
 package com.artyom.criminal_intent_v2
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.text.Editable
@@ -178,6 +180,36 @@ class CrimeFragment: Fragment(), DatePickerFragment.Callbacks {
 
         if (crime.suspect.isNotEmpty()) {
             suspectButton.text = crime.suspect
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when {
+            resultCode != Activity.RESULT_OK -> return
+            requestCode == REQUEST_CONTACT && data != null -> {
+                val contactUri: Uri? = data.data
+                // Указать, для каких полей ваш запрос должен возвращать значения.
+                val queryFields = arrayOf(ContactsContract.Contacts.DISPLAY_NAME)
+                // Выполняемый здесь запрос — contactUri похож на предложение "where"
+                //TODO: Ошибка в книге
+                val cursor = contactUri?.let {
+                    requireActivity().contentResolver
+                        .query(it, queryFields, null, null, null)
+                }
+                cursor?.use {
+                    // Verify cursor contains at least one result
+                    if (it.count == 0) {
+                        return
+                    }
+                    // Первый столбец первой строки данных —
+                    // это имя вашего подозреваемого.
+                    it.moveToFirst()
+                    val suspect = it.getString(0)
+                    crime.suspect = suspect
+                    crimeDetailViewModel.saveCrime(crime)
+                    suspectButton.text = suspect
+                }
+            }
         }
     }
 
