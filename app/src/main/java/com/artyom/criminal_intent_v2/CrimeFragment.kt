@@ -158,12 +158,12 @@ class CrimeFragment: Fragment(), DatePickerFragment.Callbacks {
             //pickContactIntent.addCategory(Intent.CATEGORY_HOME)
 
             val packageManager: PackageManager = requireActivity().packageManager
-            val resolvedActivity: ResolveInfo? =
+          /*  val resolvedActivity: ResolveInfo? =
                 packageManager.resolveActivity(pickContactIntent,
                     PackageManager.MATCH_DEFAULT_ONLY)
             if (resolvedActivity == null) {
                 isEnabled = false
-            }
+            }*/
         }
         photoButton.apply {
             Log.d(TAG, "Кнопка камеры нажата")
